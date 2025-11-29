@@ -1,38 +1,48 @@
-import { prisma } from "./../db/client";
-import {Gasto, GastoUpdate } from "../interfaces/gasto.interface";
+import { prisma } from "../db/client";
+import { Gasto, GastoUpdate } from "../interfaces/gasto.interface";
 
-
+// Obtener todos los gastos
 export const getGastos = async (): Promise<Gasto[]> => {
-    return await prisma.gasto.findMany(
-        {orderBy: { monto: 'desc'} }
-    );
+  return prisma.gasto.findMany({
+    orderBy: { monto: "desc" },
+  });
+};
 
-}
+// Buscar por ID
 export const findGastoById = async (id: number): Promise<Gasto | null> => {
-    return await prisma.gasto.findUnique({
-        where: { id }
-    });
-}
+  return prisma.gasto.findUnique({
+    where: { id },
+  });
+};
 
-export const createGasto = async (gasto: Pick<Gasto, "descripcion" | "monto" | "fechaPago">): Promise<Gasto> => {
-    return await prisma.gasto.create({
-        data: gasto
-    });
-}
+// Crear gasto
+export const createGasto = async (
+  gasto: Pick<Gasto, "descripcion" | "monto" | "fechaPago" | "frecuencia">
+): Promise<Gasto> => {
+  return prisma.gasto.create({
+    data: {
+      descripcion: gasto.descripcion,
+      monto: gasto.monto,
+      fechaPago: gasto.fechaPago,
+      frecuencia: gasto.frecuencia ?? "MONTHLY", // Default backend-friendly
+    },
+  });
+};
 
-
-export const modificarGasto = async( 
-    id: number, 
-    payl: GastoUpdate
+// Actualizar gasto
+export const modificarGasto = async (
+  id: number,
+  payload: GastoUpdate
 ): Promise<Gasto | null> => {
-    return await prisma.gasto.update({
-        where: { id },
-        data: payl
-    });
-}
+  return prisma.gasto.update({
+    where: { id },
+    data: payload,
+  });
+};
 
+// Eliminar gasto
 export const eliminarGasto = async (id: number): Promise<Gasto> => {
-    return await prisma.gasto.delete({
-        where: { id }
-    });
-}
+  return prisma.gasto.delete({
+    where: { id },
+  });
+};

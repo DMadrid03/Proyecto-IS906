@@ -1,11 +1,14 @@
 export interface Gasto {
-    id: number;
-    descripcion: string;
-    monto: number;
-    fechaPago: number; //día del mes
+  id: number
+  descripcion: string
+  monto: number
+  fechaPago: number
+  frecuencia: 'MONTHLY' | 'ANNUAL'
 }
+
 export interface GastoUpdate {
-    descripcion?: string;
-    monto?: number;
-    fechaPago?: number;
-};
+  descripcion?: string
+  monto?: number
+  fechaPago?: number
+  frecuencia?: 'MONTHLY' | 'ANNUAL'
+}

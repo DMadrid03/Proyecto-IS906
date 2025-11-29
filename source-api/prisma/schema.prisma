@@ -3,13 +3,19 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Frecuencia {
+  MONTHLY
+  ANNUAL
 }
 
 model Gasto {
-    id          Int      @id @default(autoincrement())
-    descripcion String
-    monto       Float
-    fechaPago   Int
+  id          Int        @id @default(autoincrement())
+  descripcion String
+  monto       Float
+  fechaPago   Int         // 1–31
+  frecuencia  Frecuencia  @default(MONTHLY)
 }

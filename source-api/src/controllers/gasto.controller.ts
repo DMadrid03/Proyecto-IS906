@@ -4,51 +4,60 @@ import { validateGasto, validateGastoPartial } from '../schemas/gasto.schema.zod
 import { GastoUpdate } from '../interfaces/gasto.interface';
 
 export const getGastos = async (req: Request, res: Response, next: NextFunction) => {
-
     try {
-
         const gastos = await Service.getGastos();
+
         if (gastos.length === 0) {
             return res.status(404).json({ message: 'No hay gastos registrados' });
         }
+
         res.json(gastos);
     } catch (err) {
         next(err);
     }
-}
+};
+
 export const getGastoById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id ? parseInt(req.params.id) : NaN;
+        const id = Number(req.params.id);
+
         if (isNaN(id)) {
             return res.status(400).json({ message: 'ID inválido' });
         }
+
         const gasto = await Service.findGastoById(id);
+
         if (!gasto) {
             return res.status(404).json({ message: 'Gasto no encontrado' });
         }
+
         res.json(gasto);
     } catch (err) {
         next(err);
     }
-}
-export const createGasto = async (req: Request, res: Response, next: NextFunction) => {
+};
 
+export const createGasto = async (req: Request, res: Response, next: NextFunction) => {
     const { success, data, error } = validateGasto(req.body);
 
     if (!success) {
-        return res.status(400).json({ message: 'Datos inválidos', error: error.message });
+        return res.status(400).json({
+            message: 'Datos inválidos',
+            error: error.message,
+        });
     }
+
     try {
         const newGasto = await Service.createGasto(data);
         res.status(201).json(newGasto);
     } catch (err) {
         next(err);
     }
-}
+};
 
 export const modificarGasto = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id ? parseInt(req.params.id) : NaN;
+        const id = Number(req.params.id);
 
         if (isNaN(id)) {
             return res.status(400).json({ message: 'ID inválido' });
@@ -57,11 +66,15 @@ export const modificarGasto = async (req: Request, res: Response, next: NextFunc
         const { success, data, error } = validateGastoPartial(req.body);
 
         if (!success) {
-            return res.status(400).json({ message: 'Datos inválidos', error: error.issues });
+            return res.status(400).json({
+                message: 'Datos inválidos',
+                error: error.issues,
+            });
         }
 
-        const result = await Service.findGastoById(id);
-        if (!result) {
+        const exist = await Service.findGastoById(id);
+
+        if (!exist) {
             return res.status(404).json({ message: 'Gasto no encontrado' });
         }
 
@@ -70,23 +83,25 @@ export const modificarGasto = async (req: Request, res: Response, next: NextFunc
     } catch (err) {
         next(err);
     }
-}
+};
 
 export const eliminarGasto = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const id = req.params.id ? parseInt(req.params.id) : NaN;
+        const id = Number(req.params.id);
+
         if (isNaN(id)) {
             return res.status(400).json({ message: 'ID inválido' });
         }
 
-        const result = await Service.findGastoById(id);
-        if (!result) {
+        const exist = await Service.findGastoById(id);
+
+        if (!exist) {
             return res.status(404).json({ message: 'Gasto no encontrado' });
         }
 
-        const deletedGasto = await Service.eliminarGasto(id);
-        res.json(deletedGasto);
+        const deleted = await Service.eliminarGasto(id);
+        res.json(deleted);
     } catch (err) {
         next(err);
     }
-}
+};
