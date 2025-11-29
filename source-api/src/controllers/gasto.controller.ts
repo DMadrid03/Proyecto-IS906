@@ -16,7 +16,21 @@ export const getGastos = async (req: Request, res: Response, next: NextFunction)
         next(err);
     }
 }
-
+export const getGastoById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = req.params.id ? parseInt(req.params.id) : NaN;
+        if (isNaN(id)) {
+            return res.status(400).json({ message: 'ID inválido' });
+        }
+        const gasto = await Service.findGastoById(id);
+        if (!gasto) {
+            return res.status(404).json({ message: 'Gasto no encontrado' });
+        }
+        res.json(gasto);
+    } catch (err) {
+        next(err);
+    }
+}
 export const createGasto = async (req: Request, res: Response, next: NextFunction) => {
 
     const { success, data, error } = validateGasto(req.body);
