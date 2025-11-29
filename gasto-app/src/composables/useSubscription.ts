@@ -20,7 +20,16 @@ export function useSubscriptions() {
       error.value = null
 
       const { data } = await gastoApi.get('/gastos')
-      subscriptions.value = data
+
+      subscriptions.value = data.map((g: any) => ({
+        id: g.id,
+        name: g.descripcion,
+        price: Number(g.monto),
+        fechaPago: g.fechaPago,
+        frequency: g.frecuencia ?? 'MONTHLY',
+        currency: 'HNL'
+      }))
+
     } catch (err: any) {
       error.value = err.message || 'Error al cargar suscripciones'
     } finally {
@@ -70,12 +79,11 @@ export function useSubscriptions() {
     return monthly
   }
 
-  // --- Total mensual estimado ---
+  // funcion para calcular el total mensual de todas las suscripciones
   const totalMonthly = computed(() =>
-    subscriptions.value
-      .reduce((sum, item) => sum + normalizePrice(item), 0)
-      .toFixed(2)
-  )
+    subscriptions.value.reduce((sum, item) => sum + normalizePrice(item), 0)
+  );
+
 
   return {
     // State

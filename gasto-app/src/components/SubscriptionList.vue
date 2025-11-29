@@ -57,10 +57,7 @@ onMounted(fetchSubscriptions)
         </p>
       </div>
 
-      <button
-        @click="openCreate"
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
+      <button @click="openCreate" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
         + Agregar
       </button>
     </header>
@@ -70,34 +67,22 @@ onMounted(fetchSubscriptions)
     </p>
 
     <div class="grid gap-4 mt-4">
-      <SubscriptionCard
-        v-for="item in subscriptions"
-        :key="item.id"
-        :subscription="item"
-        @edit="openEdit"
-        @delete="handleDelete"
-      />
+      <SubscriptionCard v-for="item in subscriptions" :key="item.id" :subscription="item" @edit="openEdit"
+        @delete="handleDelete" />
     </div>
 
     <!-- Modal -->
-    <div
-      v-if="showModal"
-      class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50"
-    >
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50">
       <div class="bg-white rounded shadow-lg w-full max-w-lg p-4 relative">
-        <button
-          class="absolute top-2 right-2 text-gray-500 hover:text-black"
-          @click="showModal = false"
-        >
+        <button class="absolute top-2 right-2 text-gray-500 hover:text-black" @click="showModal = false">
           ✕
         </button>
 
-        <SubscriptionForm
-          :model-value="editing"
-          @save="handleSave"
-          @cancel="showModal = false"
-        />
+        <SubscriptionForm :model-value="editing" @save="handleSave" @cancel="showModal = false" />
       </div>
     </div>
+
   </section>
+  <div class="bg-red-500 text-white p-4">TEST TAILWIND</div>
+
 </template>
