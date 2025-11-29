@@ -1,5 +1,5 @@
 import { prisma } from "./../db/client";
-import Gasto from "../interfaces/gasto.interface";
+import {Gasto, GastoUpdate } from "../interfaces/gasto.interface";
 
 
 export const getGastos = async (): Promise<Gasto[]> => {
@@ -8,6 +8,11 @@ export const getGastos = async (): Promise<Gasto[]> => {
     );
 
 }
+export const findGastoById = async (id: number): Promise<Gasto | null> => {
+    return await prisma.gasto.findUnique({
+        where: { id }
+    });
+}
 
 export const createGasto = async (gasto: Pick<Gasto, "descripcion" | "monto" | "fechaPago">): Promise<Gasto> => {
     return await prisma.gasto.create({
@@ -15,10 +20,14 @@ export const createGasto = async (gasto: Pick<Gasto, "descripcion" | "monto" | "
     });
 }
 
-export const modificarGasto = async( id: number, gasto: Pick<Gasto, "descripcion" | "monto" | "fechaPago">): Promise<Gasto> => {
+
+export const modificarGasto = async( 
+    id: number, 
+    payl: GastoUpdate
+): Promise<Gasto | null> => {
     return await prisma.gasto.update({
         where: { id },
-        data: gasto
+        data: payl
     });
 }
 
