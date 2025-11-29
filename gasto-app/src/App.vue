@@ -1,11 +1,11 @@
 <script setup lang="ts"></script>
 
 <template>
-  <router-view />
+  <!-- <router-view /> -->
 
-  <!-- <div class="bg-purple-600 text-white p-4 mt-4 rounded">
-    TEST TAILWIND — Debe verse morado
-  </div> -->
+  <div class="p-4 bg-purple-500 text-white">
+  TEST TAILWIND
+</div>
 
 </template>
 
