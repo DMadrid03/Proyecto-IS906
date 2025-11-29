@@ -83,6 +83,5 @@ onMounted(fetchSubscriptions)
     </div>
 
   </section>
-  <div class="bg-red-500 text-white p-4">TEST TAILWIND</div>
 
 </template>
