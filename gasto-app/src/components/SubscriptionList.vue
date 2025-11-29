@@ -71,7 +71,7 @@ onMounted(fetchSubscriptions)
         @delete="handleDelete" />
     </div>
 
-    <!-- Modal -->
+  
     <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50">
       <div class="bg-white rounded shadow-lg w-full max-w-lg p-4 relative">
         <button class="absolute top-2 right-2 text-gray-500 hover:text-black" @click="showModal = false">

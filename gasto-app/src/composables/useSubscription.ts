@@ -39,9 +39,35 @@ export function useSubscriptions() {
 
   // --- Crear una suscripción ---
   const createSubscription = async (payload: Subscription) => {
-    const { data } = await gastoApi.post('/gastos', payload)
-    subscriptions.value.push(data)
+
+    // Convertir USD → HNL si es necesario
+    const montoEnLps = payload.currency === 'USD'
+      ? payload.price * USD_TO_HNL
+      : payload.price
+
+    // Body que se enviará al backend (sin currency)
+    const body = {
+      descripcion: payload.name,
+      monto: montoEnLps,
+      fechaPago: payload.fechaPago,
+      frecuencia: payload.frequency
+    }
+
+    // Petición al backend
+    const { data } = await gastoApi.post('/gastos', body)
+
+    // Refrescar estado local
+    subscriptions.value.push({
+      id: data.id,
+      name: data.descripcion,
+      price: Number(data.monto),
+      fechaPago: data.fechaPago,
+      frequency: data.frecuencia,
+      currency: 'HNL' // Siempre HNL en la interfaz
+    })
   }
+
+
 
   // --- Actualizar una suscripción ---
   const updateSubscription = async (id: number, payload: Subscription) => {

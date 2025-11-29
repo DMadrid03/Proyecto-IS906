@@ -27,7 +27,6 @@ const form = reactive<Subscription>({
   fechaPago: props.modelValue?.fechaPago ?? 1
 })
 
-// Sincronizar cuando cambie modelValue
 watch(
   () => props.modelValue,
   (value) => {
@@ -38,16 +37,36 @@ watch(
       form.currency = value.currency
       form.frequency = value.frequency
       form.fechaPago = value.fechaPago
+    } else {
+      // Reset para creación
+      form.id = undefined
+      form.name = ''
+      form.price = 0
+      form.currency = 'HNL'
+      form.frequency = 'MONTHLY'
+      form.fechaPago = 1
     }
   }
 )
 
-const isEdit = computed(() => !!form.id)
+
+const isEdit = computed(() => form.id != null)
+
 
 // Enviar datos al padre
 function onSubmit() {
-  emit('save', { ...form })
+  
+  const data = { ...form }
+  console.log("ENVIANDO...",data)
+
+  // Si es creación → eliminar id
+  if (!isEdit.value) {
+    delete data.id
+  }
+
+  emit('save', data)
 }
+
 </script>
 
 <template>
